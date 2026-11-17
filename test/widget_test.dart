@@ -1,30 +1,28 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
-
-import 'package:flutter_application_1/main.dart';
+import 'package:ruta_accesible_ia/data/repositories/accessibility_repository.dart';
+import 'package:ruta_accesible_ia/data/services/accessibility_api_service.dart';
+import 'package:ruta_accesible_ia/data/services/voice_assistant_service.dart';
+import 'package:ruta_accesible_ia/main.dart';
+import 'package:ruta_accesible_ia/ui/features/scan/view_models/scan_view_model.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Renderiza la pantalla de escaneo de RutaAccesible IA', (
+    WidgetTester tester,
+  ) async {
+    final viewModel = ScanViewModel(
+      repository: AccessibilityRepository(
+        apiService: AccessibilityApiService(),
+      ),
+      voiceService: VoiceAssistantService(),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(RutaAccesibleApp(viewModel: viewModel));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('RUTAACCESIBLE IA'), findsOneWidget);
+    expect(find.text('Navegación En Vivo'), findsOneWidget);
+    expect(find.text('Listo para mirar'), findsOneWidget);
+    expect(find.text('Revisar Camino'), findsOneWidget);
+    expect(find.text('Subir foto de galería'), findsOneWidget);
+    expect(find.text('Hablar por micrófono'), findsOneWidget);
   });
 }
